@@ -1,0 +1,79 @@
+{
+  "type": "object",
+  "properties": {
+    "candidates": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "properties": {
+          "labelCode": {
+            "type": "string",
+            "enum": [
+              "SLEEP_DEFICIT",
+              "WORK_STUDY",
+              "SOCIAL_EVENT",
+              "CONFLICT",
+              "PHYSICAL_ACTIVITY",
+              "CAFFEINE",
+              "ANXIETY",
+              "CALM",
+              "FATIGUE",
+              "NAUSEA",
+              "HEADACHE",
+              "TREMOR"
+            ]
+          },
+          "quote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          },
+          "occurrence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5000
+          },
+          "presence": {
+            "type": "string",
+            "enum": [
+              "PRESENT",
+              "NEGATED",
+              "UNCERTAIN"
+            ]
+          },
+          "temporal": {
+            "type": "string",
+            "enum": [
+              "CURRENT",
+              "PAST",
+              "FUTURE",
+              "UNSPECIFIED"
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "enum": [
+              "SELF",
+              "OTHER",
+              "UNSPECIFIED"
+            ]
+          }
+        },
+        "required": [
+          "labelCode",
+          "quote",
+          "occurrence",
+          "presence",
+          "temporal",
+          "subject"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "candidates"
+  ],
+  "additionalProperties": false
+}

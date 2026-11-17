@@ -1,0 +1,1901 @@
+{
+  "task": "nlp",
+  "split": "test",
+  "gold_rows": 189,
+  "gold_approved": 189,
+  "models": {
+    "gemma4-e4b": {
+      "all": {
+        "n": 189,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 0.9866666666666667,
+          "recall": 0.9673202614379085,
+          "f1": 0.976897689768977,
+          "ci95": [
+            0.9601327578989758,
+            0.9907982495637981
+          ]
+        },
+        "macro_f1": 0.9766388206296878,
+        "macro_f1_ci95": [
+          0.9596194337782211,
+          0.9903728735453279
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 3,
+            "support": 25,
+            "precision": 0.9565217391304348,
+            "recall": 0.88,
+            "f1": 0.9166666666666666
+          },
+          "WORK_STUDY": {
+            "tp": 27,
+            "fp": 0,
+            "fn": 1,
+            "support": 28,
+            "precision": 1.0,
+            "recall": 0.9642857142857143,
+            "f1": 0.9818181818181818
+          },
+          "SOCIAL_EVENT": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 1,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.9565217391304348,
+            "f1": 0.9777777777777777
+          },
+          "CONFLICT": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 1,
+            "support": 24,
+            "precision": 1.0,
+            "recall": 0.9583333333333334,
+            "f1": 0.9787234042553191
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 24,
+            "fp": 0,
+            "fn": 0,
+            "support": 24,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CAFFEINE": {
+            "tp": 27,
+            "fp": 0,
+            "fn": 1,
+            "support": 28,
+            "precision": 1.0,
+            "recall": 0.9642857142857143,
+            "f1": 0.9818181818181818
+          },
+          "ANXIETY": {
+            "tp": 23,
+            "fp": 1,
+            "fn": 1,
+            "support": 24,
+            "precision": 0.9583333333333334,
+            "recall": 0.9583333333333334,
+            "f1": 0.9583333333333334
+          },
+          "CALM": {
+            "tp": 25,
+            "fp": 1,
+            "fn": 2,
+            "support": 27,
+            "precision": 0.9615384615384616,
+            "recall": 0.9259259259259259,
+            "f1": 0.9433962264150944
+          },
+          "FATIGUE": {
+            "tp": 26,
+            "fp": 1,
+            "fn": 0,
+            "support": 26,
+            "precision": 0.9629629629629629,
+            "recall": 1.0,
+            "f1": 0.9811320754716981
+          },
+          "NAUSEA": {
+            "tp": 25,
+            "fp": 0,
+            "fn": 0,
+            "support": 25,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "HEADACHE": {
+            "tp": 26,
+            "fp": 0,
+            "fn": 0,
+            "support": 26,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "TREMOR": {
+            "tp": 26,
+            "fp": 0,
+            "fn": 0,
+            "support": 26,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "event_level": {
+          "precision": 0.9641873278236914,
+          "recall": 0.9259259259259259,
+          "f1": 0.9446693657219973
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "contradiction": {
+            "false": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "current": {
+            "false": 1,
+            "n": 56,
+            "rate": 0.017857142857142856
+          },
+          "emoji": {
+            "false": 0,
+            "n": 11,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "no_target": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 10,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 0,
+            "n": 11,
+            "rate": 0.0
+          },
+          "past": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "typo": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 1,
+            "n": 12,
+            "rate": 0.08333333333333333
+          }
+        },
+        "latency": {
+          "n": 189,
+          "median": 1.362785379998968,
+          "p95": 1.5056110324003384
+        }
+      },
+      "hand": {
+        "n": 39,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 0.8709677419354839,
+          "recall": 0.75,
+          "f1": 0.8059701492537313,
+          "ci95": [
+            0.6808510638297872,
+            0.9041095890410958
+          ]
+        },
+        "macro_f1": 0.7281746031746033,
+        "macro_f1_ci95": [
+          0.6212026515151515,
+          0.812387085137085
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 3,
+            "support": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "WORK_STUDY": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 1,
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1": 0.8888888888888888
+          },
+          "SOCIAL_EVENT": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CONFLICT": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CAFFEINE": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 1,
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1": 0.8888888888888888
+          },
+          "ANXIETY": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 1,
+            "support": 2,
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
+          },
+          "CALM": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 2,
+            "support": 4,
+            "precision": 0.6666666666666666,
+            "recall": 0.5,
+            "f1": 0.5714285714285714
+          },
+          "FATIGUE": {
+            "tp": 4,
+            "fp": 1,
+            "fn": 0,
+            "support": 4,
+            "precision": 0.8,
+            "recall": 1.0,
+            "f1": 0.8888888888888888
+          },
+          "NAUSEA": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "HEADACHE": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "TREMOR": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "event_level": {
+          "precision": 0.7894736842105263,
+          "recall": 0.7142857142857143,
+          "f1": 0.75
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "contradiction": {
+            "false": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "current": {
+            "false": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "emoji": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "no_target": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "past": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "typo": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 1,
+            "n": 3,
+            "rate": 0.3333333333333333
+          }
+        },
+        "latency": {
+          "n": 39,
+          "median": 0.6115570930014655,
+          "p95": 2.094168475199696
+        }
+      },
+      "template": {
+        "n": 150,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 1.0,
+          "recall": 0.9962962962962963,
+          "f1": 0.9981447124304267,
+          "ci95": [
+            0.9940828402366864,
+            1.0
+          ]
+        },
+        "macro_f1": 0.998062015503876,
+        "macro_f1_ci95": [
+          0.9932432432432433,
+          1.0
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 0,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "WORK_STUDY": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "SOCIAL_EVENT": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 1,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 0.9545454545454546,
+            "f1": 0.9767441860465116
+          },
+          "CONFLICT": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 0,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CAFFEINE": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "ANXIETY": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 0,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CALM": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "FATIGUE": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 0,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "NAUSEA": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "HEADACHE": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 0,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "TREMOR": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "event_level": {
+          "precision": 0.9967320261437909,
+          "recall": 0.9682539682539683,
+          "f1": 0.9822866344605475
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 0,
+            "n": 54,
+            "rate": 0.0
+          },
+          "emoji": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "no_target": {
+            "false": 0,
+            "n": 7,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 8,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "past": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          }
+        },
+        "latency": {
+          "n": 150,
+          "median": 1.4086620899997797,
+          "p95": 1.5019001524988198
+        }
+      }
+    },
+    "qwen3.5-9b": {
+      "all": {
+        "n": 189,
+        "failed": 0,
+        "valid_first_rate": 0.9894179894179894,
+        "valid_final_rate": 0.9894179894179894,
+        "micro": {
+          "precision": 0.9339622641509434,
+          "recall": 0.9705882352941176,
+          "f1": 0.9519230769230769,
+          "ci95": [
+            0.9305791052562933,
+            0.9694236078190792
+          ]
+        },
+        "macro_f1": 0.951984484574918,
+        "macro_f1_ci95": [
+          0.9288923202691124,
+          0.9689718193654078
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 25,
+            "fp": 3,
+            "fn": 0,
+            "support": 25,
+            "precision": 0.8928571428571429,
+            "recall": 1.0,
+            "f1": 0.9433962264150944
+          },
+          "WORK_STUDY": {
+            "tp": 24,
+            "fp": 2,
+            "fn": 4,
+            "support": 28,
+            "precision": 0.9230769230769231,
+            "recall": 0.8571428571428571,
+            "f1": 0.8888888888888888
+          },
+          "SOCIAL_EVENT": {
+            "tp": 22,
+            "fp": 2,
+            "fn": 1,
+            "support": 23,
+            "precision": 0.9166666666666666,
+            "recall": 0.9565217391304348,
+            "f1": 0.9361702127659575
+          },
+          "CONFLICT": {
+            "tp": 24,
+            "fp": 2,
+            "fn": 0,
+            "support": 24,
+            "precision": 0.9230769230769231,
+            "recall": 1.0,
+            "f1": 0.96
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 24,
+            "fp": 2,
+            "fn": 0,
+            "support": 24,
+            "precision": 0.9230769230769231,
+            "recall": 1.0,
+            "f1": 0.96
+          },
+          "CAFFEINE": {
+            "tp": 27,
+            "fp": 0,
+            "fn": 1,
+            "support": 28,
+            "precision": 1.0,
+            "recall": 0.9642857142857143,
+            "f1": 0.9818181818181818
+          },
+          "ANXIETY": {
+            "tp": 23,
+            "fp": 1,
+            "fn": 1,
+            "support": 24,
+            "precision": 0.9583333333333334,
+            "recall": 0.9583333333333334,
+            "f1": 0.9583333333333334
+          },
+          "CALM": {
+            "tp": 25,
+            "fp": 2,
+            "fn": 2,
+            "support": 27,
+            "precision": 0.9259259259259259,
+            "recall": 0.9259259259259259,
+            "f1": 0.9259259259259259
+          },
+          "FATIGUE": {
+            "tp": 26,
+            "fp": 2,
+            "fn": 0,
+            "support": 26,
+            "precision": 0.9285714285714286,
+            "recall": 1.0,
+            "f1": 0.9629629629629629
+          },
+          "NAUSEA": {
+            "tp": 25,
+            "fp": 1,
+            "fn": 0,
+            "support": 25,
+            "precision": 0.9615384615384616,
+            "recall": 1.0,
+            "f1": 0.9803921568627451
+          },
+          "HEADACHE": {
+            "tp": 26,
+            "fp": 2,
+            "fn": 0,
+            "support": 26,
+            "precision": 0.9285714285714286,
+            "recall": 1.0,
+            "f1": 0.9629629629629629
+          },
+          "TREMOR": {
+            "tp": 26,
+            "fp": 2,
+            "fn": 0,
+            "support": 26,
+            "precision": 0.9285714285714286,
+            "recall": 1.0,
+            "f1": 0.9629629629629629
+          }
+        },
+        "event_level": {
+          "precision": 0.9237057220708447,
+          "recall": 0.8968253968253969,
+          "f1": 0.9100671140939597
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "contradiction": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 1,
+            "n": 56,
+            "rate": 0.017857142857142856
+          },
+          "emoji": {
+            "false": 0,
+            "n": 11,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 8,
+            "n": 13,
+            "rate": 0.6153846153846154
+          },
+          "no_target": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 10,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 10,
+            "n": 11,
+            "rate": 0.9090909090909091
+          },
+          "past": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "typo": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 2,
+            "n": 12,
+            "rate": 0.16666666666666666
+          }
+        },
+        "latency": {
+          "n": 189,
+          "median": 4.843704377999529,
+          "p95": 6.791511592199822
+        }
+      },
+      "hand": {
+        "n": 39,
+        "failed": 0,
+        "valid_first_rate": 0.9487179487179487,
+        "valid_final_rate": 0.9487179487179487,
+        "micro": {
+          "precision": 0.8709677419354839,
+          "recall": 0.75,
+          "f1": 0.8059701492537313,
+          "ci95": [
+            0.6666666666666666,
+            0.9
+          ]
+        },
+        "macro_f1": 0.7671957671957673,
+        "macro_f1_ci95": [
+          0.5857010582010582,
+          0.8720714285714285
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "support": 3,
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571428571428571
+          },
+          "WORK_STUDY": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 4,
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.2,
+            "f1": 0.3333333333333333
+          },
+          "SOCIAL_EVENT": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 1,
+            "support": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CONFLICT": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0,
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CAFFEINE": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 1,
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1": 0.8888888888888888
+          },
+          "ANXIETY": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "support": 2,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          },
+          "CALM": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 2,
+            "support": 4,
+            "precision": 0.6666666666666666,
+            "recall": 0.5,
+            "f1": 0.5714285714285714
+          },
+          "FATIGUE": {
+            "tp": 4,
+            "fp": 1,
+            "fn": 0,
+            "support": 4,
+            "precision": 0.8,
+            "recall": 1.0,
+            "f1": 0.8888888888888888
+          },
+          "NAUSEA": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0,
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "HEADACHE": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "support": 4,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "TREMOR": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "support": 3,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "event_level": {
+          "precision": 0.8301886792452831,
+          "recall": 0.6984126984126984,
+          "f1": 0.7586206896551724
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "contradiction": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "emoji": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 1,
+            "n": 4,
+            "rate": 0.25
+          },
+          "no_target": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "past": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "typo": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 1,
+            "n": 3,
+            "rate": 0.3333333333333333
+          }
+        },
+        "latency": {
+          "n": 39,
+          "median": 2.985738286999549,
+          "p95": 8.931832424302412
+        }
+      },
+      "template": {
+        "n": 150,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 0.9407665505226481,
+          "recall": 1.0,
+          "f1": 0.9694793536804309,
+          "ci95": [
+            0.9527838256946838,
+            0.9836109880372175
+          ]
+        },
+        "macro_f1": 0.9696121132696064,
+        "macro_f1_ci95": [
+          0.9533880608052377,
+          0.9839670869285022
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 22,
+            "fp": 2,
+            "fn": 0,
+            "support": 22,
+            "precision": 0.9166666666666666,
+            "recall": 1.0,
+            "f1": 0.9565217391304348
+          },
+          "WORK_STUDY": {
+            "tp": 23,
+            "fp": 2,
+            "fn": 0,
+            "support": 23,
+            "precision": 0.92,
+            "recall": 1.0,
+            "f1": 0.9583333333333334
+          },
+          "SOCIAL_EVENT": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 0,
+            "support": 22,
+            "precision": 0.9565217391304348,
+            "recall": 1.0,
+            "f1": 0.9777777777777777
+          },
+          "CONFLICT": {
+            "tp": 23,
+            "fp": 2,
+            "fn": 0,
+            "support": 23,
+            "precision": 0.92,
+            "recall": 1.0,
+            "f1": 0.9583333333333334
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 22,
+            "fp": 2,
+            "fn": 0,
+            "support": 22,
+            "precision": 0.9166666666666666,
+            "recall": 1.0,
+            "f1": 0.9565217391304348
+          },
+          "CAFFEINE": {
+            "tp": 23,
+            "fp": 0,
+            "fn": 0,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "ANXIETY": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 0,
+            "support": 22,
+            "precision": 0.9565217391304348,
+            "recall": 1.0,
+            "f1": 0.9777777777777777
+          },
+          "CALM": {
+            "tp": 23,
+            "fp": 1,
+            "fn": 0,
+            "support": 23,
+            "precision": 0.9583333333333334,
+            "recall": 1.0,
+            "f1": 0.9787234042553191
+          },
+          "FATIGUE": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 0,
+            "support": 22,
+            "precision": 0.9565217391304348,
+            "recall": 1.0,
+            "f1": 0.9777777777777777
+          },
+          "NAUSEA": {
+            "tp": 23,
+            "fp": 1,
+            "fn": 0,
+            "support": 23,
+            "precision": 0.9583333333333334,
+            "recall": 1.0,
+            "f1": 0.9787234042553191
+          },
+          "HEADACHE": {
+            "tp": 22,
+            "fp": 2,
+            "fn": 0,
+            "support": 22,
+            "precision": 0.9166666666666666,
+            "recall": 1.0,
+            "f1": 0.9565217391304348
+          },
+          "TREMOR": {
+            "tp": 23,
+            "fp": 2,
+            "fn": 0,
+            "support": 23,
+            "precision": 0.92,
+            "recall": 1.0,
+            "f1": 0.9583333333333334
+          }
+        },
+        "event_level": {
+          "precision": 0.9394904458598726,
+          "recall": 0.9365079365079365,
+          "f1": 0.9379968203497615
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 0,
+            "n": 54,
+            "rate": 0.0
+          },
+          "emoji": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 7,
+            "n": 9,
+            "rate": 0.7777777777777778
+          },
+          "no_target": {
+            "false": 0,
+            "n": 7,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 8,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 9,
+            "n": 9,
+            "rate": 1.0
+          },
+          "past": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 1,
+            "n": 9,
+            "rate": 0.1111111111111111
+          }
+        },
+        "latency": {
+          "n": 150,
+          "median": 6.257876258001488,
+          "p95": 6.6979952739013235
+        }
+      }
+    },
+    "rules": {
+      "all": {
+        "n": 189,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 0.9806949806949807,
+          "recall": 0.8300653594771242,
+          "f1": 0.8991150442477877,
+          "ci95": [
+            0.8508281723400464,
+            0.9400392948886136
+          ]
+        },
+        "macro_f1": 0.8999328465538398,
+        "macro_f1_ci95": [
+          0.848103718551946,
+          0.9396309711588404
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 21,
+            "fp": 1,
+            "fn": 4,
+            "support": 25,
+            "precision": 0.9545454545454546,
+            "recall": 0.84,
+            "f1": 0.8936170212765957
+          },
+          "WORK_STUDY": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 6,
+            "support": 28,
+            "precision": 1.0,
+            "recall": 0.7857142857142857,
+            "f1": 0.88
+          },
+          "SOCIAL_EVENT": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 3,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.8695652173913043,
+            "f1": 0.9302325581395349
+          },
+          "CONFLICT": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 3,
+            "support": 24,
+            "precision": 1.0,
+            "recall": 0.875,
+            "f1": 0.9333333333333333
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 4,
+            "support": 24,
+            "precision": 1.0,
+            "recall": 0.8333333333333334,
+            "f1": 0.9090909090909091
+          },
+          "CAFFEINE": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 6,
+            "support": 28,
+            "precision": 0.9565217391304348,
+            "recall": 0.7857142857142857,
+            "f1": 0.8627450980392157
+          },
+          "ANXIETY": {
+            "tp": 20,
+            "fp": 1,
+            "fn": 4,
+            "support": 24,
+            "precision": 0.9523809523809523,
+            "recall": 0.8333333333333334,
+            "f1": 0.8888888888888888
+          },
+          "CALM": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 5,
+            "support": 27,
+            "precision": 0.9565217391304348,
+            "recall": 0.8148148148148148,
+            "f1": 0.88
+          },
+          "FATIGUE": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 5,
+            "support": 26,
+            "precision": 1.0,
+            "recall": 0.8076923076923077,
+            "f1": 0.8936170212765957
+          },
+          "NAUSEA": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 4,
+            "support": 25,
+            "precision": 1.0,
+            "recall": 0.84,
+            "f1": 0.9130434782608695
+          },
+          "HEADACHE": {
+            "tp": 22,
+            "fp": 0,
+            "fn": 4,
+            "support": 26,
+            "precision": 1.0,
+            "recall": 0.8461538461538461,
+            "f1": 0.9166666666666666
+          },
+          "TREMOR": {
+            "tp": 22,
+            "fp": 1,
+            "fn": 4,
+            "support": 26,
+            "precision": 0.9565217391304348,
+            "recall": 0.8461538461538461,
+            "f1": 0.8979591836734694
+          }
+        },
+        "event_level": {
+          "precision": 0.8636363636363636,
+          "recall": 0.8042328042328042,
+          "f1": 0.8328767123287671
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "contradiction": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 1,
+            "n": 56,
+            "rate": 0.017857142857142856
+          },
+          "emoji": {
+            "false": 0,
+            "n": 11,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 13,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 3,
+            "n": 13,
+            "rate": 0.23076923076923078
+          },
+          "no_target": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 10,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 0,
+            "n": 11,
+            "rate": 0.0
+          },
+          "past": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          },
+          "typo": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 0,
+            "n": 12,
+            "rate": 0.0
+          }
+        },
+        "latency": {
+          "n": 189,
+          "median": 5.306899765855633e-05,
+          "p95": 0.00010837460213224401
+        }
+      },
+      "hand": {
+        "n": 39,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 0.7333333333333333,
+          "recall": 0.3055555555555556,
+          "f1": 0.43137254901960786,
+          "ci95": [
+            0.1632377275234418,
+            0.6842481203007517
+          ]
+        },
+        "macro_f1": 0.3365079365079365,
+        "macro_f1_ci95": [
+          0.11246527777777779,
+          0.5664702380952379
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 2,
+            "support": 3,
+            "precision": 1.0,
+            "recall": 0.3333333333333333,
+            "f1": 0.5
+          },
+          "WORK_STUDY": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 3,
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.4,
+            "f1": 0.5714285714285714
+          },
+          "SOCIAL_EVENT": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CONFLICT": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "support": 1,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 2,
+            "support": 2,
+            "precision": null,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CAFFEINE": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 3,
+            "support": 5,
+            "precision": 0.6666666666666666,
+            "recall": 0.4,
+            "f1": 0.5
+          },
+          "ANXIETY": {
+            "tp": 0,
+            "fp": 1,
+            "fn": 2,
+            "support": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CALM": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 3,
+            "support": 4,
+            "precision": 0.5,
+            "recall": 0.25,
+            "f1": 0.3333333333333333
+          },
+          "FATIGUE": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 3,
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.25,
+            "f1": 0.4
+          },
+          "NAUSEA": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 1,
+            "support": 2,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          },
+          "HEADACHE": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 2,
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6666666666666666
+          },
+          "TREMOR": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 2,
+            "support": 3,
+            "precision": 0.5,
+            "recall": 0.3333333333333333,
+            "f1": 0.4
+          }
+        },
+        "event_level": {
+          "precision": 0.4594594594594595,
+          "recall": 0.2698412698412698,
+          "f1": 0.34
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "contradiction": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "emoji": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 4,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 2,
+            "n": 4,
+            "rate": 0.5
+          },
+          "no_target": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "past": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "typo": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 0,
+            "n": 3,
+            "rate": 0.0
+          }
+        },
+        "latency": {
+          "n": 39,
+          "median": 4.3661999370669946e-05,
+          "p95": 0.00011644979858829178
+        }
+      },
+      "template": {
+        "n": 150,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "micro": {
+          "precision": 0.9959016393442623,
+          "recall": 0.9,
+          "f1": 0.9455252918287937,
+          "ci95": [
+            0.9094477900628276,
+            0.9764705882352941
+          ]
+        },
+        "macro_f1": 0.9455392798416055,
+        "macro_f1_ci95": [
+          0.9067438524551237,
+          0.9765931861843569
+        ],
+        "macro_labels": 12,
+        "per_label": {
+          "SLEEP_DEFICIT": {
+            "tp": 20,
+            "fp": 1,
+            "fn": 2,
+            "support": 22,
+            "precision": 0.9523809523809523,
+            "recall": 0.9090909090909091,
+            "f1": 0.9302325581395349
+          },
+          "WORK_STUDY": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 3,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.8695652173913043,
+            "f1": 0.9302325581395349
+          },
+          "SOCIAL_EVENT": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 2,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "f1": 0.9523809523809523
+          },
+          "CONFLICT": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 2,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.9130434782608695,
+            "f1": 0.9545454545454546
+          },
+          "PHYSICAL_ACTIVITY": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 2,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "f1": 0.9523809523809523
+          },
+          "CAFFEINE": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 3,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.8695652173913043,
+            "f1": 0.9302325581395349
+          },
+          "ANXIETY": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 2,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "f1": 0.9523809523809523
+          },
+          "CALM": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 2,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.9130434782608695,
+            "f1": 0.9545454545454546
+          },
+          "FATIGUE": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 2,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "f1": 0.9523809523809523
+          },
+          "NAUSEA": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 3,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.8695652173913043,
+            "f1": 0.9302325581395349
+          },
+          "HEADACHE": {
+            "tp": 20,
+            "fp": 0,
+            "fn": 2,
+            "support": 22,
+            "precision": 1.0,
+            "recall": 0.9090909090909091,
+            "f1": 0.9523809523809523
+          },
+          "TREMOR": {
+            "tp": 21,
+            "fp": 0,
+            "fn": 2,
+            "support": 23,
+            "precision": 1.0,
+            "recall": 0.9130434782608695,
+            "f1": 0.9545454545454546
+          }
+        },
+        "event_level": {
+          "precision": 0.9111111111111111,
+          "recall": 0.9111111111111111,
+          "f1": 0.9111111111111111
+        },
+        "false_actual_by_scenario": {
+          "colloquial": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "current": {
+            "false": 0,
+            "n": 54,
+            "rate": 0.0
+          },
+          "emoji": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "future": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "injection": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "multi": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "negation": {
+            "false": 1,
+            "n": 9,
+            "rate": 0.1111111111111111
+          },
+          "no_target": {
+            "false": 0,
+            "n": 7,
+            "rate": 0.0
+          },
+          "nonsense": {
+            "false": 0,
+            "n": 8,
+            "rate": 0.0
+          },
+          "other": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "past": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          },
+          "uncertain": {
+            "false": 0,
+            "n": 9,
+            "rate": 0.0
+          }
+        },
+        "latency": {
+          "n": 150,
+          "median": 5.371699808165431e-05,
+          "p95": 0.00010634465088514843
+        }
+      }
+    }
+  }
+}

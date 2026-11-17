@@ -1,0 +1,143 @@
+{
+  "task": "report",
+  "split": "test",
+  "gold_rows": 25,
+  "gold_approved": 25,
+  "models": {
+    "gemma4-e4b-free": {
+      "all": {
+        "n": 25,
+        "failed": 0,
+        "valid_first_rate": 0.88,
+        "valid_final_rate": 0.96,
+        "fallback_rate": 0.040000000000000036,
+        "rejection_reasons": {
+          "CLAIM_CITES_ONLY_QUOTATIONS": 2,
+          "UNSUPPORTED_NUMBER": 1
+        },
+        "required_coverage_published": 0.9336147186147186,
+        "required_coverage_valid_llm": 0.9308486652236652,
+        "claims_mean": 4.96,
+        "chars_mean": 675.48,
+        "flags": {
+          "direction_on_insufficient_comparison": 0,
+          "trend_claims_without_trend_fact": 0,
+          "comparison_claims": 17
+        },
+        "latency": {
+          "n": 25,
+          "median": 4.9129247659984685,
+          "p95": 10.12430683039783
+        }
+      }
+    },
+    "gemma4-e4b-freenq": {
+      "all": {
+        "n": 25,
+        "failed": 0,
+        "valid_first_rate": 0.96,
+        "valid_final_rate": 0.96,
+        "fallback_rate": 0.040000000000000036,
+        "rejection_reasons": {
+          "FORBIDDEN_WORDING": 1
+        },
+        "required_coverage_published": 0.9474747474747474,
+        "required_coverage_valid_llm": 0.9452861952861952,
+        "claims_mean": 4.92,
+        "chars_mean": 626.04,
+        "flags": {
+          "direction_on_insufficient_comparison": 0,
+          "trend_claims_without_trend_fact": 0,
+          "comparison_claims": 22
+        },
+        "latency": {
+          "n": 25,
+          "median": 4.517456007000874,
+          "p95": 5.628466542199021
+        }
+      }
+    },
+    "qwen3.5-9b-free": {
+      "all": {
+        "n": 25,
+        "failed": 0,
+        "valid_first_rate": 0.48,
+        "valid_final_rate": 0.48,
+        "fallback_rate": 0.52,
+        "rejection_reasons": {
+          "UNSUPPORTED_DATE": 2,
+          "CLAIM_CITES_ONLY_QUOTATIONS": 3,
+          "UNSUPPORTED_NUMBER": 4,
+          "UNVERIFIED_QUOTATION": 2,
+          "FORBIDDEN_WORDING": 1,
+          "SPELLED-OUT_NUMBER": 1
+        },
+        "required_coverage_published": 0.98,
+        "required_coverage_valid_llm": 0.9583333333333334,
+        "claims_mean": 9.76,
+        "chars_mean": 874.44,
+        "flags": {
+          "direction_on_insufficient_comparison": 0,
+          "trend_claims_without_trend_fact": 0,
+          "comparison_claims": 11
+        },
+        "latency": {
+          "n": 25,
+          "median": 20.407787233001727,
+          "p95": 44.259467113002025
+        }
+      }
+    },
+    "qwen3.5-9b-freenq": {
+      "all": {
+        "n": 25,
+        "failed": 0,
+        "valid_first_rate": 0.72,
+        "valid_final_rate": 0.72,
+        "fallback_rate": 0.28,
+        "rejection_reasons": {
+          "SPELLED-OUT_NUMBER": 3,
+          "UNSUPPORTED_NUMBER": 4
+        },
+        "required_coverage_published": 0.9849350649350649,
+        "required_coverage_valid_llm": 0.979076479076479,
+        "claims_mean": 7.12,
+        "chars_mean": 769.72,
+        "flags": {
+          "direction_on_insufficient_comparison": 0,
+          "trend_claims_without_trend_fact": 0,
+          "comparison_claims": 18
+        },
+        "latency": {
+          "n": 25,
+          "median": 17.243587983000907,
+          "p95": 26.66749365079959
+        }
+      }
+    },
+    "template": {
+      "all": {
+        "n": 25,
+        "failed": 0,
+        "valid_first_rate": 1.0,
+        "valid_final_rate": 1.0,
+        "fallback_rate": 0.0,
+        "rejection_reasons": {},
+        "required_coverage_published": 1.0,
+        "required_coverage_valid_llm": 1.0,
+        "claims_mean": 13.76,
+        "chars_mean": 989.56,
+        "flags": {
+          "direction_on_insufficient_comparison": 0,
+          "trend_claims_without_trend_fact": 0,
+          "comparison_claims": 25
+        },
+        "latency": {
+          "n": 25,
+          "median": 3.706699862959795e-05,
+          "p95": 0.0002801191993057724
+        }
+      }
+    }
+  }
+}

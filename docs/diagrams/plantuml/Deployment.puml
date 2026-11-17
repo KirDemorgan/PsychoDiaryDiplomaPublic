@@ -1,0 +1,44 @@
+@startuml Deployment
+title Развёртывание и поставка бэкенда
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+
+actor "Разработчик" as dev
+node "GitHub" as gh {
+  component "Backend CI\n(mvn verify, Testcontainers)" as ci
+  component "Backend Deploy\n(docker build, docker save)" as cd
+  component "Mobile CI\n(тесты, типы, линтер)" as mci
+}
+
+node "Сервер" as srv {
+  component "deploy.sh\n(forced command, SSH)" as deploy
+  component "Caddy\n(автоматический HTTPS)" as caddy
+  component "Контейнер backend\nSpring Boot" as backend
+  database "PostgreSQL" as pg
+}
+
+node "iPhone / Simulator" as phone {
+  component "Приложение дневника" as app
+}
+
+node "Домашний ПК с RTX 4060 (WSL2)" as win {
+  component "Ollama\ngemma4:e4b" as ollama
+  component "ASR-сервис\nGigaAM v3 e2e" as asr
+}
+
+dev --> gh : push в master
+ci --> cd : успех
+cd --> deploy : образ по SSH
+deploy --> backend : перезапуск
+deploy ..> backend : откат, если\n/actuator/health не отвечает
+app --> caddy : HTTPS 443
+caddy --> backend : reverse proxy :8080
+backend --> pg
+backend ..> ollama : задачи AI\n(Tailscale)
+backend ..> asr : диктовка\n(Tailscale)
+
+note bottom of win
+  Модели выбраны экспериментом и подключены 24.10.2026;
+  порты в интернет не открыты, связь через Tailscale.
+end note
+@enduml

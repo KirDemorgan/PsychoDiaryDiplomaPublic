@@ -1,0 +1,40 @@
+# Конфигурация исследования. Теги Ollama и ревизии весов уточняются после `ollama pull` / первого запуска
+# и фиксируются здесь же вместе с версиями библиотек (см. results/*/meta.json).
+
+ollama:
+  endpoint: http://127.0.0.1:11434/api/chat
+  num_ctx: 8192
+  num_predict: 4096
+  timeout_s: 180
+
+llm_models:
+  - id: qwen3.5-9b
+    tag: qwen3.5:9b
+  - id: qwen3.5-4b
+    tag: qwen3.5:4b
+  - id: gemma4-e4b
+    tag: gemma4:e4b
+  - id: gigachat3.1-lightning
+    tag: TODO_after_gguf_import
+  # - id: yandexgpt5-lite
+  #   tag: TODO
+
+asr_models:
+  - id: whisper-turbo
+    kind: whisper
+    model: openai/whisper-large-v3-turbo
+  - id: gigaam-v3-e2e
+    kind: gigaam
+    model: v3_e2e_rnnt
+  - id: t-one
+    kind: tone
+
+# Критерии выбора фиксируются до запуска test.
+selection:
+  llm:
+    min_valid_final_rate: 0.95
+    max_p95_seconds: 30
+    tie_breaker: "если макро-F1 различаются в пределах доверительных интервалов — выбрать более лёгкую модель"
+  asr:
+    max_rtf_median: 1.0
+    tie_breaker: "по WER на живой речи и доле сохранённых критических слов"

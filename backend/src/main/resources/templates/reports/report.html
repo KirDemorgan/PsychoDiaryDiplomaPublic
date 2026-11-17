@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Дневник состояния — отчёт наблюдений</title>
+    <style>
+        @page { size: A4; margin: 17mm 17mm 19mm;
+            @bottom-left { content: 'Дневник состояния · конфиденциально'; font-family: Diary; font-size: 8pt; color: #667585; }
+            @bottom-right { content: counter(page) ' / ' counter(pages); font-family: Diary; font-size: 8pt; color: #667585; }
+        }
+        body { font-family: Diary; font-size: 9pt; line-height: 1.55; color: #25364b; }
+        h1 { font-size: 23pt; font-weight: 700; margin: 0 0 3mm; line-height: 1.25; }
+        h2 { font-size: 14pt; margin: 8mm 0 3mm; color: #214f53; page-break-after: avoid; }
+        h3 { font-size: 10pt; margin: 4mm 0 2mm; page-break-after: avoid; }
+        p { margin: 0 0 2mm; }
+        .brand { width: 100%; margin-bottom: 7mm; border-bottom: 1px solid #dbe6e9; }
+        .brand td { border: none; padding: 0 0 4mm; vertical-align: middle; }
+        .mark { width: 15mm; height: 15mm; }
+        .wordmark { font-size: 13pt; font-weight: 700; }
+        .eyebrow { font-size: 8pt; color: #667585; letter-spacing: 1px; }
+        .muted { color: #667585; }
+        .hero { background: #f0f6f4; padding: 5mm; border-left: 3px solid #267e72; margin-bottom: 5mm; }
+        .notice { font-size: 8pt; color: #526475; background: #f4f6f8; padding: 3mm; margin: 3mm 0; }
+        .stats { width: 100%; }
+        table { width: 100%; border-collapse: collapse; font-size: 8pt; -fs-table-paginate: paginate; }
+        th { text-align: left; font-weight: 700; background: #eef4f5; padding: 2.2mm; }
+        td { padding: 2.2mm; border-bottom: 1px solid #e3e9ec; vertical-align: top; }
+        tr { page-break-inside: avoid; }
+        thead { display: table-header-group; }
+        .chart { width: 100%; height: auto; display: block; }
+        .chart-block { page-break-inside: avoid; margin-bottom: 4mm; }
+        .entry { margin: 3mm 0 5mm; border-top: 1px solid #dbe6e9; padding-top: 3mm; }
+        .entry-head { color: #526475; font-size: 8pt; page-break-after: avoid; }
+        .entry-text { white-space: pre-wrap; word-wrap: break-word; }
+        .claim { margin: 0 0 3mm; }
+        .source { font-size: 7pt; color: #718091; word-wrap: break-word; }
+        .section-start { page-break-before: always; }
+        .empty { color: #667585; padding: 3mm 0; }
+    </style>
+</head>
+<body>
+<table class="brand"><tr>
+    <td style="width:20mm"><img class="mark" th:src="${logo}" alt="Символ дневника"/></td>
+    <td><div class="wordmark">Дневник состояния</div><div class="eyebrow">НАБЛЮДЕНИЯ МЕЖДУ КОНСУЛЬТАЦИЯМИ</div></td>
+</tr></table>
+<div class="hero">
+    <div class="eyebrow">ОТЧЁТ ДЛЯ ОБСУЖДЕНИЯ С ВРАЧОМ</div>
+    <h1>Наблюдения за период</h1>
+    <p><strong th:text="${report.selection.displayName != null ? report.selection.displayName : 'Без указания имени'}">Псевдоним</strong></p>
+    <p><span th:text="${report.selection.from}">Дата</span> — <span th:text="${report.selection.to}">Дата</span>
+        · <span th:text="${report.selection.timeZone}">Зона</span></p>
+</div>
+<p class="notice">Самооценки и подтверждённый пользователем контекст. Отчёт не является медицинским заключением,
+    не устанавливает причины состояния и не оценивает эффективность лечения.</p>
+<section th:if="${showRatings}">
+    <h2>01 · Состояние и заполненность</h2>
+    <table><thead><tr><th>Показатель</th><th>Заполнено слотов</th><th>Дней с данными</th></tr></thead><tbody>
+    <tr><td>Тревога</td><td th:text="${coverage['ANXIETY'].filled + ' / ' + coverage['ANXIETY'].expected}"></td><td th:text="${coverage['ANXIETY'].filledDays}"></td></tr>
+    <tr><td>Настроение</td><td th:text="${coverage['MOOD'].filled + ' / ' + coverage['MOOD'].expected}"></td><td th:text="${coverage['MOOD'].filledDays}"></td></tr>
+    <tr><td>Энергия</td><td th:text="${coverage['ENERGY'].filled + ' / ' + coverage['ENERGY'].expected}"></td><td th:text="${coverage['ENERGY'].filledDays}"></td></tr>
+    </tbody></table>
+    <p class="muted">Каждый день: утро, день, вечер. Значения независимы. Пустое значение не равно нулю.</p>
+    <div class="chart-block"><h3>Тревога · 0–10</h3><img class="chart" th:src="${anxietyChart}" alt="Дневные значения тревоги"/></div>
+    <div class="chart-block"><h3>Настроение · 0–10</h3><img class="chart" th:src="${moodChart}" alt="Дневные значения настроения"/></div>
+    <div class="chart-block"><h3>Энергия · 0–10</h3><img class="chart" th:src="${energyChart}" alt="Дневные значения энергии"/></div>
+    <p class="notice">Графики показывают средние доступных слотов. Разрывы означают отсутствие наблюдений,
+        а не восстановленные значения. Дополнительные записи не меняют вес дня.</p>
+    <h3>Данные оценок</h3>
+    <table><thead><tr><th>Дата / слот</th><th>Тревога</th><th>Настроение</th><th>Энергия</th></tr></thead><tbody>
+    <tr th:each="rating : ${report.previewData.ratings}"><td><span th:text="${rating.localDate}"></span><br/><span th:text="${labels[rating.slot.toString()]}"></span></td>
+        <td th:text="${rating.anxiety != null ? rating.anxiety : 'Нет данных'}"></td>
+        <td th:text="${rating.mood != null ? rating.mood : 'Нет данных'}"></td>
+        <td th:text="${rating.energy != null ? rating.energy : 'Нет данных'}"></td></tr>
+    </tbody></table>
+</section>
+<section th:if="${showOverview}" class="section-start">
+    <h2 th:text="${report.overview.title}">Обзор наблюдений</h2>
+    <p class="notice" th:text="${report.overviewMode.toString() == 'AI' ? 'Режим: нейросетевая генерация с проверкой фактов.' : 'Режим: детерминированный шаблон. Нейросетевая генерация не использована.'}"></p>
+    <div th:each="claim : ${report.overview.claims}" class="claim"><p th:text="${claim.text}"></p>
+        <p class="source" th:text="${'Факты: ' + #strings.listJoin(claim.factIds, ', ')}"></p></div>
+    <p th:each="limitation : ${report.overview.limitations}" class="muted" th:text="${limitation}"></p>
+</section>
+<section th:if="${showTags}">
+    <h2>Контекст с подтверждёнными цитатами</h2>
+    <table><thead><tr><th>Признак</th><th>Упоминаний</th><th>Дней</th></tr></thead><tbody>
+    <tr th:each="frequency : ${report.previewData.statistics.tagFrequencies}"><td th:text="${frequency.code.labelRu}"></td><td th:text="${frequency.occurrences}"></td><td th:text="${frequency.days}"></td></tr>
+    </tbody></table>
+    <p class="notice">Подтверждённое упоминание не доказывает причинную связь. Отрицания, неопределённость,
+        чужие и будущие события не считаются наблюдаемым присутствием.</p>
+    <div th:each="context : ${report.previewData.tags}" class="entry">
+        <p class="entry-head"><span th:text="${context.tag.appliesToLocalDate}"></span> · <span th:text="${context.tag.labelCode.labelRu}"></span>
+            · <span th:text="${labels[context.tag.presence.toString()]}"></span> / <span th:text="${labels[context.tag.temporal.toString()]}"></span> / <span th:text="${labels[context.tag.subject.toString()]}"></span></p>
+        <p class="entry-text" th:text="${context.tag.quote}"></p>
+        <p class="source" th:text="${'Запись ' + context.entryId + ', редакция ' + context.revision}"></p>
+    </div>
+    <p th:each="ambiguous : ${report.previewData.statistics.ambiguousContext}" class="notice"
+       th:text="${ambiguous.date + ': неоднозначный контекст ' + ambiguous.codes}"></p>
+    <h3 th:if="${!#lists.isEmpty(report.previewData.comparisons)}">Сравнения проверенных дней</h3>
+    <div th:each="comparison : ${report.previewData.comparisons}"><p><strong th:text="${comparison.tagCode.labelRu}"></strong>
+        · <span th:text="${labels[comparison.metric.toString()]}"></span></p>
+        <p th:if="${comparison.status == 'INSUFFICIENT_DATA'}" class="muted">Недостаточно данных: требуется минимум пять проверенных дней в обеих группах.</p>
+        <p><span th:text="${'С упоминанием: ' + comparison.withMention.nDays + ' дней, среднее ' + (comparison.withMention.mean != null ? comparison.withMention.mean : 'нет данных')}"></span><br/>
+            <span th:text="${'Без упоминания: ' + comparison.withoutMention.nDays + ' дней, среднее ' + (comparison.withoutMention.mean != null ? comparison.withoutMention.mean : 'нет данных')}"></span></p>
+        <p class="source" th:text="${'Исключено: нет оценки ' + comparison.excluded.noRating + ', нет записи ' + comparison.excluded.noEntry + ', неполное ревью ' + comparison.excluded.incompleteContext + ', неоднозначность ' + comparison.excluded.ambiguousContext}"></p>
+    </div>
+</section>
+<section th:if="${showMedications}" class="section-start">
+    <h2>Препараты и журнал приёмов</h2>
+    <p class="notice">Назначения введены пользователем. Отчёт не рекомендует препараты, дозы или изменения лечения.</p>
+    <table><thead><tr><th>Препарат</th><th>План</th><th>Принято</th><th>Пропущено</th><th>Нет данных</th><th>Покрытие отметками</th></tr></thead><tbody>
+    <tr th:each="adherence : ${report.previewData.statistics.medicationAdherence}">
+        <td th:text="${adherence.medicationName}"></td><td th:text="${adherence.planned}"></td>
+        <td th:text="${adherence.taken}"></td><td th:text="${adherence.skipped}"></td><td th:text="${adherence.noData}"></td>
+        <td th:text="${adherence.markedCoverage != null ? adherence.markedCoverage * 100 + '%' : 'Нет плана'}"></td>
+    </tr></tbody></table>
+    <p th:if="${#lists.isEmpty(report.previewData.medications)}" class="empty">Препараты не выбраны.</p>
+    <div th:each="medication : ${report.previewData.medications}">
+        <h3 th:text="${medication.name}"></h3><p th:if="${medication.form != null}" class="muted" th:text="${medication.form}"></p>
+        <div th:each="version : ${medication.scheduleVersions}"><p class="entry-head"
+             th:text="${'Схема с ' + version.effectiveFrom + ', до ' + (version.effectiveUntil != null ? version.effectiveUntil : 'смены схемы') + '; зона ' + version.timeZone}"></p>
+            <p th:if="${version.treatmentEndsOn != null}" th:text="${'Последний день лечения: ' + version.treatmentEndsOn}"></p>
+            <table><thead><tr><th>Время</th><th>Дни</th><th>Доза</th></tr></thead><tbody>
+            <tr th:each="slot : ${version.slots}"><td th:text="${slot.localTime}"></td><td th:text="${slot.daysOfWeek}"></td><td th:text="${slot.dose + ' ' + labels[slot.unit.toString()]}"></td></tr>
+            </tbody></table>
+        </div>
+        <table><thead><tr><th>Плановое время</th><th>Доза плана</th><th>Отметка</th><th>Факт</th></tr></thead><tbody>
+        <tr th:each="occurrence : ${medication.occurrences}"><td th:text="${occurrence.plannedAt}"></td><td th:text="${occurrence.plannedDose + ' ' + labels[occurrence.unit.toString()]}"></td><td th:text="${labels[occurrence.status.toString()]}"></td>
+            <td th:text="${occurrence.intake != null and occurrence.intake.actualAt != null ? occurrence.intake.actualAt + ' · ' + occurrence.intake.actualDose + ' ' + labels[occurrence.intake.unit.toString()] : 'Нет фактического приёма'}"></td></tr>
+        </tbody></table>
+        <p th:each="intake : ${medication.intakes}" th:if="${intake.kind.toString() == 'UNPLANNED'}"
+           th:text="${'Внеплановый приём: ' + intake.actualAt + ' · ' + intake.actualDose + ' ' + labels[intake.unit.toString()]}"></p>
+    </div>
+    <p class="notice">TAKEN — принято, SKIPPED — явно пропущено, NO_DATA — нет отметки. Доля принятого считается
+        от всех плановых доз; неизвестные исходы не скрываются. Внеплановые приёмы не закрывают план.</p>
+</section>
+<section th:if="${showNotes}" class="section-start">
+    <h2>Выбранные записи</h2>
+    <p th:if="${#lists.isEmpty(report.previewData.entries)}" class="empty">Записи не выбраны.</p>
+    <div th:each="entry : ${report.previewData.entries}" class="entry">
+        <p class="entry-head"><span th:text="${entry.occurredAt}"></span> · <span th:text="${entry.timeZone}"></span>
+            · редакция <span th:text="${entry.revision}"></span></p>
+        <p class="entry-text" th:text="${entry.text}"></p>
+        <p class="source" th:text="${'Источник: ' + entry.id}"></p>
+    </div>
+</section>
+<h2>Как читать расчёты</h2>
+<p class="muted">Дневное значение — среднее доступных утренних, дневных и вечерних оценок. Средние и доли округлены
+    до четырёх знаков. Дни сравниваются с одинаковым весом. «Без упоминания» означает отсутствие подтверждённого
+    упоминания в проверенном тексте, а не доказанное отсутствие события. Скрытые и исключённые источники не участвуют
+    в фактах или обзоре. Пользователь сам выбирает, кому передать этот файл.</p>
+</body>
+</html>

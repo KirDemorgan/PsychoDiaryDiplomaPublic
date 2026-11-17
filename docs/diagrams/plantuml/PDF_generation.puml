@@ -1,0 +1,128 @@
+@startuml PDF_generation
+!pragma teoz true
+hide footbox
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 250
+skinparam defaultFontName SansSerif
+skinparam backgroundColor #FFFFFF
+skinparam ArrowColor #3F5E66
+skinparam ParticipantBackgroundColor #EDF8F5
+skinparam ParticipantBorderColor #147D78
+
+title Генерация PDF — запрос, очередь, предпросмотр и выгрузка
+caption Фактические серверные контракты; клиент реализован, LLM Gemma 4 E4B подключена 24.10.2026
+
+actor "Пользователь" as User
+boundary "iPhone / Simulator\n(планируется)" as Client
+control "ReportController\nReportService" as Reports
+database "PostgreSQL" as DB
+control "AiWorker / AiQueue" as Worker
+participant "OllamaModelAdapter\n(HTTP /api/chat)" as Model
+control "ReportPdfRenderer" as Renderer
+
+User -> Client : Период, зона, источники и разделы
+Client -> Reports : POST /reports + JWT + Idempotency-Key
+activate Reports
+ref over Reports, DB : PDF_selection.puml: доступ, повторы, выборка и исключения
+Reports -> DB : BEGIN; lock пользователя; прочитать разрешённые данные
+Reports -> Reports : Рассчитать статистику, factId/sourceRefs и inputHash
+note right of Reports
+  NULL не становится нулём.
+  Пропуски не интерполируются.
+  Сравнение: ≥ 5 дней в каждой группе.
+  Скрытые источники исключены до расчётов.
+end note
+alt AI_OVERVIEW выбран
+    Reports -> DB : Сохранить snapshot + ai_task QUEUED; COMMIT
+    Reports --> Client : 202 QUEUED + Location + ETag
+else Обзор исключён
+    Reports -> DB : Сохранить snapshot READY; overviewMode=NONE; COMMIT
+    Reports --> Client : 202 READY + Location + ETag
+end
+deactivate Reports
+
+opt Есть QUEUED или просроченный RUNNING
+    Worker -> DB : TX: lock владельца, свежесть, claim lease/token
+    DB --> Worker : Сохранённый пакет фактов и provenance
+    note over Worker, Model
+      Внешний вызов выполняется вне транзакции БД.
+      Модель получает выбранные факты, не полный snapshot.
+    end note
+    ref over Worker, Model : AI_task_state.puml: максимум 2 попытки, timeout, отмена и устаревание
+    alt Адаптер доступен, версии совпадают
+        Worker -> Model : generate: system prompt + JSON + schema
+        Model --> Worker : Структурированный ответ либо ошибка/timeout
+        Worker -> Worker : Строгий JSON; type/factId/sourceRefs/allowedText
+        alt Ответ валиден
+            Worker -> DB : TX: повторная проверка владельца, lease, хеша и согласия
+            alt Задача всё ещё актуальна
+                Worker -> DB : READY + overviewMode=AI + provenance
+            else Отмена / изменение / удаление / отключение AI
+                Worker -> Worker : Отбросить поздний ответ
+            end
+        else Невалидный ответ
+            Worker -> DB : Первая ошибка → QUEUED; вторая → FAILED
+            opt Исчерпаны 2 попытки и источники актуальны
+                Worker -> DB : Отчёт READY + TEMPLATE + причина отказа
+            end
+        end
+    else Модель не настроена / сменена / версия несовместима
+        Worker -> DB : TX: guard публикации; задача FAILED
+        Worker -> DB : Если актуален: отчёт READY + TEMPLATE + причина
+    end
+end
+
+loop Пока пользователь смотрит предпросмотр
+    Client -> Reports : GET /reports/{id}
+    Reports -> DB : Owner scope + актуальная dataRevision
+    Reports --> Client : Статус, выборка, факты, обзор, данные графиков
+    opt Источники изменены или удалены
+        DB -> DB : Триггер: стереть snapshot и receipt payload;
+        DB -> DB : Активная задача STALE; активный отчёт CANCELLED
+        Reports --> Client : stale=true; чувствительные данные отсутствуют
+    end
+end
+
+User -> Client : Подтвердить выгрузку; можно скрыть AI-блок
+Client -> Reports : GET /reports/{id}/pdf?includeAiOverview=true|false
+activate Reports
+alt Невалидный вход / чужой ID
+    Reports --> Client : 401 / 404
+else Источники изменились
+    Reports --> Client : 409 REPORT_STALE; создать новый отчёт
+else Статус не READY
+    Reports --> Client : 409 REPORT_NOT_READY
+else READY и актуален
+    Reports -> Renderer : Неизменяемый JSON snapshot + includeAiOverview
+    activate Renderer
+    Renderer -> Renderer : Thymeleaf: экранировать текст, выбрать блоки
+    Renderer -> Renderer : Java2D: три графика с разрывами
+    Renderer -> Renderer : OpenHTMLtoPDF: A4, кириллица, логотип,
+    Renderer -> Renderer : таблицы, записи, препараты, обзор, колонтитулы
+    note right of Renderer
+      HTTP / file / сторонние ресурсы запрещены.
+      Только собственные PNG и встроенные шрифты.
+      PDF создаётся в памяти, без обращения к БД/LLM.
+    end note
+    alt Успешный рендеринг
+        Renderer --> Reports : byte[] PDF
+        Reports --> Client : 200 application/pdf; attachment; no-store
+        Client --> User : Предпросмотр и системный Share (планируется)
+    else Ошибка renderer
+        Renderer --> Reports : Безопасная ошибка
+        Reports --> Client : 500; snapshot сохранён, GET можно повторить
+    end
+    deactivate Renderer
+end
+ deactivate Reports
+
+note over Reports, DB
+  Отмена: POST /reports/{id}/cancel + Idempotency-Key.
+  Только QUEUED/RUNNING; READY/FAILED → 409.
+  DELETE + If-Match: 428/412 при отсутствующей/старой версии;
+  удаление отчёта каскадно удаляет задачу, receipt становится tombstone.
+  DELETE /me: пароль + confirm; удаление всех данных и сессий.
+  Поздний worker не восстанавливает удалённый результат.
+end note
+@enduml

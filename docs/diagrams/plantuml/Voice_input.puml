@@ -1,0 +1,112 @@
+@startuml Voice_input
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam activity {
+  BackgroundColor #F3F6FA
+  BorderColor #43546A
+}
+title Голосовой ввод X04 — серверный поток и подтверждение текста
+legend left
+  Сервер реализован. HTTP-транспорты готовы; iPhone UI и реальные модели — следующий этап.
+  ASR и текстовая LLM используют разные адаптеры и очереди.
+endlegend
+|iPhone / будущий клиент|
+start
+:Записать WAV PCM16 mono 16 kHz;
+:Загрузить audio + Idempotency-Key;
+|Spring Boot|
+if (JWT и владелец действительны?) then (нет)
+  :401;
+  stop
+else (да)
+endif
+if (Multipart / WAV / размер / длительность допустимы?) then (нет)
+  :400 / 413 / 415;
+  stop
+else (да)
+endif
+:Транзакция: lock app_user;
+if (AI и отдельное голосовое согласие актуальны?) then (нет)
+  :403;
+  stop
+else (да)
+endif
+if (Есть квитанция этого ключа?) then (да)
+  :Тот же SHA-256 → прежний 202;
+  :Другой WAV → 409; tombstone → 410;
+  stop
+else (да)
+endif
+if (ASR настроен, нет активной задачи,
+не превышены 30 загрузок/час?) then (нет)
+  :503 / 409 / 429;
+  stop
+else (да)
+endif
+:Сохранить QUEUED + WAV, TTL 15 минут;
+:Commit и 202 + Location;
+|Worker|
+:Захват: owner lock, TTL/согласие/попытки;
+if (Задача ещё допустима?) then (нет)
+  :EXPIRED / CANCELLED / FAILED;
+  :Очистить аудио;
+  stop
+else (да)
+endif
+:RUNNING + leaseToken;
+:Commit; максимум две попытки;
+|ASR / будущая inference-обёртка|
+:HTTP WAV → JSON text/modelId;
+:Timeout 60 секунд;
+|Worker|
+:Проверить модель, JSON/размер,
+непустой текст, длину и Unicode;
+:Транзакция публикации: owner lock;
+if (Статус, lease, TTL и согласие ещё актуальны?) then (нет)
+  :Отбросить поздний результат;
+  :При TTL/отзыве → очистить задачу;
+  stop
+else (да)
+endif
+if (Результат допустим?) then (нет)
+  if (Переходная ошибка и это первая попытка?) then (да)
+    :QUEUED, удалить lease;
+    :Следующий захват повторяет ASR;
+  else (нет)
+    :FAILED, очистить WAV;
+  endif
+  stop
+else (да)
+endif
+:SUCCEEDED; удалить WAV;
+:Текст доступен 24 часа;
+|iPhone / будущий клиент|
+:GET собственной задачи;
+:Показать редактируемую расшифровку;
+if (Пользователь подтверждает текст?) then (нет)
+  :Правка / удаление черновика;
+  stop
+else (да)
+endif
+:Сохранить обычным API дневника;
+|Spring Boot|
+:Создать редакцию текста;
+:Запустить текстовый AI по редакции;
+|Текстовая LLM / HTTP Ollama|
+:Извлечь кандидаты тегов с цитатами;
+|Spring Boot|
+:Проверить структуру и точные цитаты;
+|iPhone / будущий клиент|
+:Принять / изменить / отклонить теги;
+|Spring Boot|
+:Подтверждённые факты → аналитика;
+:Выбор источников → пакет фактов;
+|Текстовая LLM / HTTP Ollama|
+:Обзор PDF по разрешённым фактам;
+|Spring Boot|
+:Валидация / один повтор / шаблон;
+:Предпросмотр и PDF;
+stop
+@enduml

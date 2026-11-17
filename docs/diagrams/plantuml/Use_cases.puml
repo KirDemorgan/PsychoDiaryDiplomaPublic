@@ -1,0 +1,59 @@
+@startuml Use_cases
+title Варианты использования
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam packageStyle rectangle
+
+actor "Пользователь" as user
+actor "Врач\n(вне приложения)" as doctor
+actor "AI-сервис\n(Gemma 4 E4B, GigaAM)" as ai
+
+rectangle "Дневник состояния" {
+  usecase "Войти / зарегистрироваться" as UC1
+  usecase "Поставить оценки по слотам" as UC2
+  usecase "Написать запись" as UC3
+  usecase "Надиктовать запись" as UC4
+  usecase "Проверить AI-теги\nс цитатами" as UC5
+  usecase "Разметить теги вручную" as UC6
+  usecase "Вести препараты, схемы\nи отметки приёма" as UC7
+  usecase "Получать напоминания" as UC8
+  usecase "Смотреть календарь, день\nи динамику" as UC9
+  usecase "Сравнить дни\nс тегом и без" as UC10
+  usecase "Сформировать отчёт\nи PDF для врача" as UC11
+  usecase "Настроить AI, голос,\nтему и данные" as UC12
+  usecase "Экспортировать\nили удалить данные" as UC13
+  usecase "Быстрая запись\nс виджета и Control" as UC14
+}
+
+user --> UC1
+user --> UC2
+user --> UC3
+user --> UC4
+user --> UC5
+user --> UC6
+user --> UC7
+user --> UC8
+user --> UC9
+user --> UC10
+user --> UC11
+user --> UC12
+user --> UC13
+user --> UC14
+
+UC4 .> UC3 : <<include>>
+UC5 .> UC3 : <<extend>>
+UC6 .> UC3 : <<extend>>
+UC10 .> UC9 : <<extend>>
+UC13 .> UC12 : <<extend>>
+
+ai --> UC5 : предлагает теги
+ai --> UC4 : распознаёт речь
+ai --> UC11 : пишет обзор
+doctor <-- UC11 : получает PDF\nот пользователя
+
+note bottom of UC5
+  AI только предлагает, подтверждает человек.
+  AI и голос включаются отдельным согласием.
+end note
+@enduml

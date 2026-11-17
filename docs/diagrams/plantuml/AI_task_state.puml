@@ -1,0 +1,63 @@
+@startuml AI_task_state
+!pragma layout smetana
+hide empty description
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam backgroundColor #FFFFFF
+skinparam stateBackgroundColor #EDF8F5
+skinparam stateBorderColor #147D78
+skinparam ArrowColor #3F5E66
+
+title Жизненный цикл сохранённой AI-задачи
+caption Типы ENTRY и REPORT; модель Gemma 4 E4B подключена через адаптер Ollama
+
+state "QUEUED" as Queued
+state "RUNNING" as Running
+state "SUCCEEDED" as Succeeded
+state "FAILED" as Failed
+state "CANCELLED" as Cancelled
+state "STALE" as Stale
+
+[*] --> Queued : Сохранённая редакция / снимок + согласие
+Queued --> Running : Lock владельца, свежесть; attempt++;\nlease = timeout + 30 сек, новый token
+Running --> Queued : Ошибка модели / JSON / timeout;\nattempt < 2; один повтор
+Running --> Running : Lease истёк; attempt < 2;\nновый захват / token / attempt++
+Running --> Succeeded : Строгая проверка результата;\nguard публикации прошёл
+Running --> Failed : Вторая ошибка / потеря второго lease\nМодель не настроена / сменилась;\nprompt/schema несовместимы
+Queued --> Cancelled : Отмена / AI отключён / ревью завершено
+Running --> Cancelled : Отмена / AI отключён / ревью завершено
+Queued --> Stale : Редакция / хеш / dataRevision изменились
+Running --> Stale : Редакция / хеш / dataRevision изменились
+Succeeded --> [*]
+Failed --> [*]
+Cancelled --> [*]
+Stale --> [*]
+
+note right of Running
+  Внешний вызов вне транзакции БД.
+  Timeout по умолчанию 30 секунд.
+  Перед publish: владелец, согласие,
+  status, lease/token, хеш и редакция.
+  Старый token / просроченный ответ
+  ничего не публикует.
+end note
+note right of Succeeded
+  ENTRY: immutable кандидаты, не факты.
+  Человек подтверждает через tag-review.
+  REPORT: READY + AI provenance;
+  v1 выбирает/группирует allowedText.
+end note
+note right of Failed
+  ENTRY: ручная разметка, текст сохранён.
+  REPORT: если snapshot актуален,
+  READY + TEMPLATE + причина отказа.
+  Никакой фиктивной production-модели.
+end note
+note bottom of Stale
+  Для старой редакции результат в API скрыт.
+  Терминальные задачи сохраняют историю до удаления.
+  DELETE записи / отчёта / аккаунта удаляет задачу каскадно.
+  После FAILED/CANCELLED новый запрос создаёт новую задачу,
+  а не изменяет терминальный экземпляр.
+end note
+@enduml

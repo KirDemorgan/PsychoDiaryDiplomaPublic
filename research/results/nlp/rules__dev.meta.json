@@ -1,0 +1,21 @@
+{
+  "started_at": "2026-10-23T16:12:04.823999+00:00",
+  "python": "3.12.3",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "packages": {
+    "requests": "2.34.2",
+    "jsonschema": "4.26.0"
+  },
+  "torch": "2.14.1+cu130",
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 4060",
+    "vram_gb": 8.0
+  },
+  "split": "dev",
+  "origin": "all",
+  "rows": 75,
+  "allow_draft": false,
+  "prompt_version": "entry-extraction-v2",
+  "prompt_sha256": "1ff242734d1626815526a251564f753e426793722ff70e0dc2cc6d7e09eab4c4",
+  "schema_sha256": "d879c4a235e4ccfb39af665d10ccd7f46055be597c9ab7d034077c66ad1ff3b9"
+}

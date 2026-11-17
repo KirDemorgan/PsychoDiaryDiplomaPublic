@@ -1,0 +1,167 @@
+@startuml ERD_domain
+!pragma layout smetana
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam backgroundColor #FFFFFF
+skinparam entityBackgroundColor #EDF8F5
+skinparam entityBorderColor #147D78
+skinparam ArrowColor #3F5E66
+
+title Фактическая ERD — препараты, подтверждения, AI, голос и артефакты
+caption Миграции 001–008, 24.10.2026; показаны значимые поля и основные связи; audit-поля опущены
+
+entity "app_user" as app_user <<context>> {
+    * id : uuid <<PK>>
+    data_revision : bigint
+}
+
+entity "diary_entry" as diary_entry <<context>> {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    revision : integer
+    current_review_id : uuid nullable <<FK>>
+}
+
+entity "medication" as medication {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    name : varchar
+    archived_at : timestamptz nullable
+}
+
+entity "schedule_version" as schedule_version {
+    * id : uuid <<PK>>
+    * medication_id : uuid <<FK>>
+    effective_from : timestamptz
+    effective_until : timestamptz nullable
+    time_zone : varchar
+}
+
+entity "schedule_slot" as schedule_slot {
+    * id : uuid <<PK>>
+    * schedule_version_id : uuid <<FK>>
+    * medication_id : uuid <<FK>>
+    days : varchar
+    local_time : time
+    dose : numeric
+    unit : varchar
+}
+
+entity "intake_event" as intake_event {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    * medication_id : uuid <<FK>>
+    schedule_slot_id : uuid nullable <<FK>>
+    planned_at : timestamptz nullable
+    actual_at : timestamptz nullable
+    kind : PLANNED | UNPLANNED
+    status : TAKEN | SKIPPED
+    actual_dose : numeric nullable
+    unit : varchar nullable
+}
+
+entity "tag_review" as tag_review {
+    * id : uuid <<PK>>
+    * entry_id : uuid <<FK>>
+    revision : integer <<FK>>
+    complete : boolean
+}
+
+entity "entry_tag" as entry_tag {
+    * id : uuid <<PK>>
+    * review_id : uuid <<FK>>
+    * entry_id : uuid <<FK>>
+    revision : integer <<FK>>
+    candidate_id : uuid nullable <<FK>>
+    label_code : varchar
+    quote : text
+    start_index / end_index : integer
+    presence / temporal / subject : varchar
+    applies_to_local_date : date nullable
+    origin : varchar
+}
+
+entity "report" as report {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    source_data_revision : bigint
+    input_hash : varchar
+    status : varchar
+    snapshot_json : text nullable
+}
+
+entity "data_export" as data_export {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    source_data_revision : bigint
+    expires_at : timestamptz
+    archive : bytea nullable
+}
+
+entity "transcription" as transcription {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    status : varchar
+    audio : bytea nullable
+    duration_millis : bigint
+    transcript : text nullable
+    model_id : varchar nullable
+    attempt : integer [0..2]
+    expires_at : timestamptz
+    lease_until / lease_token : nullable
+}
+
+entity "ai_task" as ai_task {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    entry_id / revision : nullable <<FK>>
+    report_id : uuid nullable <<FK>>
+    kind : ENTRY | REPORT
+    status : varchar
+    attempt : integer [0..2]
+    input_hash : varchar
+    lease_until / lease_token : nullable
+    model_id / prompt_version / schema_version
+}
+
+entity "analysis_candidate" as analysis_candidate {
+    * id : uuid <<PK>>
+    * task_id : uuid <<FK>>
+    * entry_id / revision <<FK>>
+    label_code / quote
+    start_index / end_index : UTF-16
+    presence / temporal / subject
+}
+
+entity "review_candidate_decision" as review_candidate_decision {
+    * id : uuid <<PK>>
+    * review_id : uuid <<FK>>
+    * candidate_id : uuid <<FK>>
+    * entry_id / revision <<FK>>
+    action : ACCEPT | EDIT | REJECT | PENDING
+    applies_to_local_date : date nullable
+}
+
+app_user ||--o{ ai_task : владелец
+app_user ||--o{ medication : владелец
+app_user ||--o{ report : владелец
+app_user ||--o{ data_export : владелец
+app_user ||--o{ transcription : владелец
+medication ||--o{ schedule_version : версии
+schedule_version ||--|{ schedule_slot : слоты
+medication ||--o{ intake_event : приёмы
+schedule_slot |o--o{ intake_event : плановая отметка
+diary_entry ||--o{ tag_review : редакция (entry_revision)
+tag_review ||--o{ entry_tag : теги
+diary_entry |o..o| tag_review : текущее ревью
+diary_entry |o--o{ ai_task : ENTRY
+report |o--o{ ai_task : REPORT
+ai_task ||--o{ analysis_candidate : кандидаты
+analysis_candidate |o--o{ entry_tag : происхождение AI
+analysis_candidate ||--o{ review_candidate_decision : решения
+tag_review ||--o{ review_candidate_decision : история
+
+note "Все FK каскадны при удалении, кроме ссылки на текущее review.\nСоставные FK сверяют владельца / запись / редакцию.\nАвторизация дополнительно проверяется сервисами.\nЧастичные индексы: одна активная AI-задача на редакцию/отчёт." as Rules
+@enduml

@@ -1,0 +1,54 @@
+@startuml Components
+title Компоненты системы
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+
+package "iPhone (Expo, React Native)" as mobile {
+  component "Экраны и маршруты\n(Expo Router)" as screens
+  component "Бизнес-логика\n(TanStack Query, Zustand,\nRHF + Zod)" as logic
+  component "API-клиент\n(JWT, ETag/If-Match,\nIdempotency-Key)" as api
+  component "Платформенные адаптеры\n(уведомления, запись звука,\nшаринг PDF, Keychain)" as platform
+  component "Виджет и Control\n(Swift, App Intents)" as widget
+}
+
+package "Сервер (Spring Boot 4, Java 25)" as server {
+  component "REST-контроллеры\n+ безопасность (JWT, сессии)" as rest
+  component "Дневник\n(оценки, записи, препараты)" as diary
+  component "Аналитика и отчёты\n(снимок, PDF)" as reports
+  component "AI-модуль\n(очередь, проверка цитат,\nNarrativeGuard)" as ai
+  component "Голосовой модуль\n(очередь ASR, согласие)" as speech
+  component "ModelAdapter\n(Ollama HTTP)" as modeladapter
+  component "SpeechAdapter\n(HTTP WAV/JSON)" as speechadapter
+}
+
+database "PostgreSQL 18\n(Liquibase, очередь задач)" as db
+
+node "Хост моделей (Windows, RTX 4060)" as models {
+  component "LLM через Ollama\n(Gemma 4 E4B)" as llm
+  component "ASR-сервис\n(GigaAM v3 e2e)" as asr
+}
+
+screens --> logic
+logic --> api
+logic --> platform
+widget ..> screens : открывает\nновую запись
+api --> rest : HTTPS
+rest --> diary
+rest --> reports
+rest --> ai
+rest --> speech
+diary --> db
+reports --> db
+ai --> db
+speech --> db
+ai --> modeladapter
+speech --> speechadapter
+modeladapter --> llm : JSON Schema
+speechadapter --> asr : WAV
+
+note bottom of models
+  AI отключается независимо от дневника.
+  Сервер не вызывает модель вне очереди задач.
+end note
+@enduml

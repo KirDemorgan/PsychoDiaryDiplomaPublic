@@ -1,0 +1,101 @@
+@startuml ERD_core
+!pragma layout smetana
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam backgroundColor #FFFFFF
+skinparam entityBackgroundColor #EDF8F5
+skinparam entityBorderColor #147D78
+skinparam ArrowColor #3F5E66
+
+title Фактическая ERD — пользователи, авторизация и дневник
+caption Миграции 001–008, 24.10.2026; показаны значимые поля, audit-поля опущены
+
+entity "app_user" as app_user {
+    * id : uuid <<PK>>
+    email : varchar <<UQ>>
+    password_hash : varchar
+    time_zone : varchar
+    data_revision : bigint
+}
+
+entity "user_settings" as user_settings {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK, UQ>>
+    ai_enabled : boolean
+    ai_consent_version : varchar
+    ai_consent_accepted_at : timestamptz
+    speech_enabled : boolean
+    speech_consent_version : varchar
+    speech_consent_accepted_at : timestamptz
+}
+
+entity "auth_session" as auth_session {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    expires_at : timestamptz
+    revoked_at : timestamptz
+}
+
+entity "refresh_token" as refresh_token {
+    * id : uuid <<PK>>
+    * session_id : uuid <<FK>>
+    token_hash : varchar <<UQ>>
+    consumed_at : timestamptz
+}
+
+entity "state_rating" as state_rating {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    local_date : date
+    slot : varchar
+    anxiety / mood / energy : integer nullable
+    --
+    UQ(user_id, local_date, slot)
+}
+
+entity "diary_entry" as diary_entry {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    revision : integer
+    text : text
+    occurred_at : timestamptz
+    time_zone : varchar
+    report_visible : boolean
+    current_review_id : uuid nullable <<FK>>
+    review_complete : boolean
+}
+
+entity "entry_revision" as entry_revision {
+    * id : uuid <<PK>>
+    * entry_id : uuid <<FK>>
+    revision : integer
+    text : text
+    occurred_at : timestamptz
+    --
+    UQ(entry_id, revision)
+}
+
+entity "mutation_receipt" as mutation_receipt {
+    * id : uuid <<PK>>
+    * user_id : uuid <<FK>>
+    operation_id : uuid
+    route : varchar
+    resource_id : uuid
+    response_payload : text nullable
+    gone : boolean
+    --
+    UQ(user_id, route, operation_id)
+}
+
+app_user ||--|| user_settings : настройки
+app_user ||--o{ auth_session : сессии
+auth_session ||--o{ refresh_token : ротации
+app_user ||--o{ state_rating : оценки
+app_user ||--o{ diary_entry : записи
+diary_entry ||--|{ entry_revision : редакции
+app_user ||--o{ mutation_receipt : повторы
+
+note "Оценки независимы: 0–10 или NULL.\nВерсии и повторы защищены уникальностями и транзакциями.\nСостояние HTTP не хранится; отзыв JWT проверяется по активной сессии в БД." as Rules
+@enduml

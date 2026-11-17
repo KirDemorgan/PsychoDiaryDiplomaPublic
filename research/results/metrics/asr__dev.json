@@ -1,0 +1,134 @@
+{
+  "task": "asr",
+  "split": "dev",
+  "gold_rows": 35,
+  "gold_approved": 35,
+  "models": {
+    "gigaam-v3-e2e": {
+      "all": {
+        "n": 32,
+        "failed": 0,
+        "wer": 0.04778156996587031,
+        "wer_ci95": [
+          0.020759455912182315,
+          0.0776716182373323
+        ],
+        "cer": 0.024949426837491573,
+        "wer_by_slice": {
+          "condition:clean": 0.013888888888888888,
+          "condition:fast": 0.013888888888888888,
+          "condition:noise_8db": 0.08333333333333333,
+          "condition:quiet": 0.07792207792207792,
+          "origin:human": 0.07792207792207792,
+          "origin:tts": 0.037037037037037035
+        },
+        "critical": {
+          "total": 50,
+          "preserved": 49,
+          "rate": 0.98
+        },
+        "silence": {
+          "n": 3,
+          "false_text": 0,
+          "inserted_words": 0
+        },
+        "punctuation_rate": 1.0,
+        "capitalised_rate": 1.0,
+        "rtf": {
+          "n": 32,
+          "median": 0.07296912940429409,
+          "p95": 0.1123296059412227
+        },
+        "seconds": {
+          "n": 32,
+          "median": 0.2690549990000477,
+          "p95": 0.4635111605000076
+        }
+      }
+    },
+    "t-one": {
+      "all": {
+        "n": 32,
+        "failed": 0,
+        "wer": 0.16723549488054607,
+        "wer_ci95": [
+          0.10622553816046966,
+          0.2272839783978397
+        ],
+        "cer": 0.055967633175994604,
+        "wer_by_slice": {
+          "condition:clean": 0.19444444444444445,
+          "condition:fast": 0.125,
+          "condition:noise_8db": 0.2777777777777778,
+          "condition:quiet": 0.07792207792207792,
+          "origin:human": 0.07792207792207792,
+          "origin:tts": 0.19907407407407407
+        },
+        "critical": {
+          "total": 50,
+          "preserved": 44,
+          "rate": 0.88
+        },
+        "silence": {
+          "n": 3,
+          "false_text": 0,
+          "inserted_words": 0
+        },
+        "punctuation_rate": 0.0,
+        "capitalised_rate": 0.0,
+        "rtf": {
+          "n": 32,
+          "median": 0.08484597502540105,
+          "p95": 0.13764392021221372
+        },
+        "seconds": {
+          "n": 32,
+          "median": 0.3510897790000058,
+          "p95": 0.49293854264999976
+        }
+      }
+    },
+    "whisper-turbo": {
+      "all": {
+        "n": 32,
+        "failed": 0,
+        "wer": 0.10921501706484642,
+        "wer_ci95": [
+          0.06853475867366533,
+          0.15277893133997786
+        ],
+        "cer": 0.06203641267700607,
+        "wer_by_slice": {
+          "condition:clean": 0.08333333333333333,
+          "condition:fast": 0.05555555555555555,
+          "condition:noise_8db": 0.2361111111111111,
+          "condition:quiet": 0.06493506493506493,
+          "origin:human": 0.06493506493506493,
+          "origin:tts": 0.125
+        },
+        "critical": {
+          "total": 50,
+          "preserved": 48,
+          "rate": 0.96
+        },
+        "silence": {
+          "n": 3,
+          "false_text": 3,
+          "inserted_words": 16
+        },
+        "punctuation_rate": 1.0,
+        "capitalised_rate": 1.0,
+        "rtf": {
+          "n": 32,
+          "median": 0.1253795327018596,
+          "p95": 0.15975166554894082
+        },
+        "seconds": {
+          "n": 32,
+          "median": 0.4466847924995818,
+          "p95": 0.6082499991990516
+        }
+      }
+    }
+  }
+}

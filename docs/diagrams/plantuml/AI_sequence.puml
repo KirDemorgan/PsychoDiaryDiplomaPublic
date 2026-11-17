@@ -1,0 +1,43 @@
+@startuml AI_sequence
+title Извлечение тегов: предлагает AI, подтверждает человек
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+
+actor "Пользователь" as user
+participant "Приложение" as app
+participant "AnalysisController" as ctrl
+participant "AiTaskService" as svc
+database "PostgreSQL\n(ai_task)" as db
+participant "AiWorker" as worker
+participant "ModelAdapter" as adapter
+participant "LLM (Gemma 4 E4B)" as llm
+participant "AiResultValidator" as validator
+
+user -> app : сохраняет запись
+app -> ctrl : POST /entries/{id}/analyses\n(Idempotency-Key, согласие на AI)
+ctrl -> svc : создать задачу
+svc -> db : QUEUED (текст записи)
+ctrl --> app : ответ с id задачи (QUEUED)
+
+loop lease
+  worker -> db : взять QUEUED (lease)
+end
+worker -> adapter : запрос (текст = данные, не инструкции)
+adapter -> llm : JSON Schema, temperature 0
+llm --> adapter : кандидаты (метка, quote, presence, temporal, subject)
+adapter --> worker : ответ
+worker -> validator : цитаты по UTF-16, словарь меток
+alt ответ валиден
+  validator --> worker : кандидаты
+  worker -> db : SUCCEEDED + analysis_candidate
+else невалиден
+  validator --> worker : отклонено
+  worker -> db : FAILED (или повтор после lease)
+end
+
+app -> ctrl : GET /analyses/{id}
+ctrl --> app : кандидаты с цитатами
+user -> app : подтверждает или правит
+app -> ctrl : PUT /entries/{id}/tag-review
+note right: Непроверенный ответ\nмодели фактом не становится.
+@enduml

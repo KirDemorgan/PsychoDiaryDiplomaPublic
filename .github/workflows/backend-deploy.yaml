@@ -1,0 +1,75 @@
+name: Backend Deploy
+on:
+  workflow_run:
+    workflows: [Backend CI]
+    types: [completed]
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Deploy even if backend/ is unchanged since the last deployment
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: backend-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    name: Build image and restart backend
+    if: >-
+      github.ref == 'refs/heads/master' &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TARGET_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TARGET_SHA }}
+          fetch-depth: 0
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<CONFIG
+          Host deploy-target
+            HostName $DEPLOY_HOST
+            User deploy
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          CONFIG
+      - name: Decide whether backend/ changed since the last deployment
+        id: changes
+        env:
+          FORCE: ${{ inputs.force }}
+        run: |
+          deployed=$(ssh deploy-target status)
+          echo "Deployed commit: ${deployed:-none}"
+          if [ "$FORCE" = "true" ] || [ -z "$deployed" ] || ! git cat-file -e "$deployed^{commit}" 2>/dev/null; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          elif git merge-base --is-ancestor "$TARGET_SHA" "$deployed"; then
+            echo "Target is already contained in the deployed commit"
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          elif git diff --quiet "$deployed" "$TARGET_SHA" -- backend/; then
+            echo "backend/ is unchanged"
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build image
+        if: steps.changes.outputs.deploy == 'true'
+        run: docker build -t "diary-backend:$TARGET_SHA" backend
+      - name: Upload image and restart backend
+        if: steps.changes.outputs.deploy == 'true'
+        run: docker save "diary-backend:$TARGET_SHA" | gzip | ssh deploy-target "deploy $TARGET_SHA"

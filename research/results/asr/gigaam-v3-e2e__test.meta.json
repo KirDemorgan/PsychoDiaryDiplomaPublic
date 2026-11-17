@@ -1,0 +1,30 @@
+{
+  "started_at": "2026-10-23T20:50:39.889491+00:00",
+  "python": "3.12.3",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "packages": {
+    "torch": "2.14.1",
+    "transformers": "4.57.6",
+    "gigaam": "0.2.0",
+    "tone": "0.1.0",
+    "soundfile": "0.14.0"
+  },
+  "torch": "2.14.1+cu130",
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 4060",
+    "vram_gb": 8.0
+  },
+  "model": {
+    "id": "gigaam-v3-e2e",
+    "kind": "gigaam",
+    "model": "v3_e2e_rnnt"
+  },
+  "split": "test",
+  "rows": 100,
+  "allow_draft": false,
+  "adapter": {
+    "model": "v3_e2e_rnnt",
+    "runtime": "gigaam"
+  },
+  "peak_vram_gb": 0.458
+}

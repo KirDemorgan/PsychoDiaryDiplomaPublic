@@ -1,0 +1,30 @@
+{
+  "qwen3.5-9b-freenq": {
+    "n": 7,
+    "clarity_mean": 4.142857142857143,
+    "unsupported_rate": 0.14285714285714285,
+    "partial_omission_rate": 0.0,
+    "missed_important_rate": 0.0
+  },
+  "gemma4-e4b-free": {
+    "n": 4,
+    "clarity_mean": 3.75,
+    "unsupported_rate": 0.5,
+    "partial_omission_rate": 0.0,
+    "missed_important_rate": 0.0
+  },
+  "gemma4-e4b-freenq": {
+    "n": 9,
+    "clarity_mean": 3.888888888888889,
+    "unsupported_rate": 0.1111111111111111,
+    "partial_omission_rate": 0.0,
+    "missed_important_rate": 0.0
+  },
+  "template": {
+    "n": 10,
+    "clarity_mean": 3.2,
+    "unsupported_rate": 0.0,
+    "partial_omission_rate": 0.0,
+    "missed_important_rate": 0.0
+  }
+}

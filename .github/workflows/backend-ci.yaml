@@ -1,0 +1,46 @@
+name: Backend CI
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: backend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    name: Unit, PostgreSQL integration, coverage >= 80%
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate local Compose configuration
+        working-directory: .
+        env:
+          DB_PASSWORD: compose-validation-only
+        run: docker compose -f infra/compose.yaml --profile ai config --quiet
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+          cache-dependency-path: backend/pom.xml
+      - name: Unit and integration tests, coverage gate
+        run: mvn --batch-mode --no-transfer-progress clean verify -Pintegration-tests
+      - name: Upload test and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: backend-test-reports
+          path: |
+            backend/target/surefire-reports/
+            backend/target/failsafe-reports/
+            backend/target/site/jacoco/
+          if-no-files-found: warn
+          retention-days: 7

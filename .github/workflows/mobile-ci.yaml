@@ -1,0 +1,42 @@
+name: Mobile CI
+on:
+  pull_request:
+    branches: [master]
+    paths: ['mobile/**', '.github/workflows/mobile-ci.yaml']
+  push:
+    branches: [master]
+    paths: ['mobile/**', '.github/workflows/mobile-ci.yaml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mobile-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  checks:
+    name: Typecheck, lint, unit tests with coverage gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+      - name: Generate typed routes
+        run: |
+          CI=1 npx expo start --offline --port 8089 > /tmp/metro.log 2>&1 &
+          for attempt in $(seq 1 45); do
+            [ -f .expo/types/router.d.ts ] && break
+            sleep 2
+          done
+          test -f .expo/types/router.d.ts
+          kill %1 || true
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:coverage -- --ci

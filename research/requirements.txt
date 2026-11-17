@@ -1,0 +1,13 @@
+# Лёгкие зависимости: метрики, отчёт, студия датасета, клиент Ollama. Ставятся одной командой на любой машине.
+numpy
+pandas
+matplotlib
+jiwer
+jsonschema
+requests
+pyyaml
+streamlit
+pyarrow<22  # новее требует NumPy 2, а окружение ASR на NumPy 1.26
+soundfile
+scipy<1.15  # с numpy 1.26 (его требует окружение ASR)
+pytest

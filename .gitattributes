@@ -1,0 +1,2 @@
+/research/local/*.cmd text eol=crlf
+/research/local/*.sh text eol=lf

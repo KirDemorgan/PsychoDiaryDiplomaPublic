@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-10-23T16:13:19.116685+00:00",
+  "python": "3.12.3",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "packages": {
+    "torch": "2.14.1",
+    "transformers": "5.20.1",
+    "gigaam": "0.2.0",
+    "tone": "0.1.0",
+    "soundfile": "0.14.0"
+  },
+  "torch": "2.14.1+cu130",
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 4060",
+    "vram_gb": 8.0
+  },
+  "model": {
+    "id": "t-one",
+    "kind": "tone"
+  },
+  "split": "dev",
+  "rows": 35,
+  "allow_draft": false,
+  "adapter": {
+    "model": "t-tech/T-one",
+    "runtime": "tone"
+  },
+  "peak_vram_gb": 0.0
+}

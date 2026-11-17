@@ -1,0 +1,61 @@
+@startuml Backend_classes
+title Ключевые классы AI, голоса и отчётов
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam classAttributeIconSize 0
+
+package "ai" {
+  class AiTaskService
+  class AiQueue
+  class AiWorker
+  class AiResultValidator
+  class NarrativeGuard
+  interface ModelAdapter
+  class OllamaModelAdapter
+  class ModelGateway
+  class AiTask {
+    kind: AiKind
+    status: AiStatus
+  }
+  class AnalysisCandidate
+}
+
+package "speech" {
+  interface SpeechAdapter
+  class HttpSpeechAdapter
+  class SpeechGateway
+}
+
+package "reports" {
+  class ReportService
+  class ReportSnapshotBuilder
+  class ReportFactBuilder
+  class TemplateOverview
+  class ReportPdfRenderer
+  class ReportChartRenderer
+  class Report {
+    status: ReportStatus
+    overviewMode: OverviewMode
+  }
+}
+
+AiTaskService --> AiQueue
+AiWorker --> AiQueue
+AiWorker --> ModelGateway
+AiWorker --> AiResultValidator
+AiResultValidator --> NarrativeGuard
+AiResultValidator --> TemplateOverview : откат на шаблон
+AiQueue --> TemplateOverview : откат на шаблон
+ModelGateway --> ModelAdapter
+OllamaModelAdapter ..|> ModelAdapter
+AiTask "1" o-- "*" AnalysisCandidate
+SpeechGateway --> SpeechAdapter
+HttpSpeechAdapter ..|> SpeechAdapter
+ReportService --> ReportSnapshotBuilder
+ReportSnapshotBuilder --> ReportFactBuilder
+ReportSnapshotBuilder --> TemplateOverview
+ReportService --> AiTaskService : обзор
+ReportService --> ReportPdfRenderer
+ReportPdfRenderer --> ReportChartRenderer
+ReportService --> Report
+@enduml

@@ -1,0 +1,96 @@
+@startuml PDF_selection
+!pragma useVerticalIf on
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam backgroundColor #FFFFFF
+skinparam activityBackgroundColor #EDF8F5
+skinparam activityBorderColor #147D78
+skinparam ArrowColor #3F5E66
+
+title Создание отчёта — проверка запроса и разрешённой выборки
+caption Серверная activity; все ошибочные ветви завершают текущий запрос
+
+start
+partition "Вход и повторы" {
+    :POST /reports;
+    if (JWT и сессия действительны?) then (нет)
+        :401;
+        stop
+    else (да)
+    endif
+    :Заблокировать строку пользователя;
+    if (Этот Idempotency-Key уже сохранён?) then (да)
+        if (Результат стёрт?) then (да)
+            :410 RESOURCE_GONE;
+        elseif (Хеш запроса отличается?) then (да)
+            :409 IDEMPOTENCY_CONFLICT;
+        else (нет)
+            :Повторить исходный 202 и Location;
+        endif
+        stop
+    else (нет)
+    endif
+}
+partition "Выборка" {
+    if (Период ≤ 366 дней, зона IANA,
+разделы и списки ID корректны?) then (нет)
+        :400;
+        stop
+    else (да)
+    endif
+    if (Выбран AI_OVERVIEW?) then (да)
+        if (AI включён и согласие актуально?) then (нет)
+            :403 AI_DISABLED / AI_CONSENT_REQUIRED;
+            stop
+        else (да)
+        endif
+    else (нет)
+    endif
+    if (EXPLICIT ID принадлежит владельцу?) then (нет)
+        :404;
+        stop
+    else (да)
+    endif
+    if (EXPLICIT запись скрыта от отчётов?) then (да)
+        :409 SOURCE_NOT_REPORTABLE;
+        stop
+    else (нет)
+    endif
+    if (EXPLICIT запись вне периода?) then (да)
+        :400;
+        stop
+    else (нет)
+    endif
+    :ALL_VISIBLE исключает скрытые записи;
+    :NONE, снятые разделы и ID исключаются
+до расчётов и вызова модели;
+    if (Выбрано больше 3000 записей?) then (да)
+        :400;
+        stop
+    else (нет)
+    endif
+}
+partition "Снимок" {
+    :Согласованно собрать выбранные оценки,
+контекст, версии схем и журнал приёмов;
+    :Рассчитать покрытие, дневные средние,
+частоты тегов, сравнения и выполнение схем;
+    note right
+      Пустая выборка допустима.
+      NULL/NO_DATA сохраняют смысл.
+      Мало дней → недостаточность данных.
+      Противоречия исключаются явно.
+    end note
+    :Сформировать факты со стабильными factId,
+sourceRefs, inputHash и dataRevision;
+    if (AI_OVERVIEW выбран?) then (да)
+        :Сохранить предварительный TEMPLATE_PREVIEW;
+        :Отчёт QUEUED + задача AI;
+    else (нет)
+        :Отчёт READY, overviewMode=NONE;
+    endif
+    :Сохранить receipt и COMMIT;
+}
+:202 + Location + ETag;
+stop
+@enduml

@@ -1,0 +1,8 @@
+# Тяжёлые зависимости ASR. Ставить только на машине с моделями (Windows/WSL2, RTX 4060) в отдельное окружение.
+# Версии не закреплены: их нужно зафиксировать после первого успешного прогона (pip freeze -> meta.json).
+torch
+transformers>=4.57,<5  # 5.x требует huggingface_hub>=1.0, а T-one — <1.0
+accelerate
+# GigaAM устанавливается из репозитория (см. README GigaAM; зафиксировать commit):
+#   git clone https://github.com/salute-developers/GigaAM && pip install -e "GigaAM[torch]"
+# T-one (kenlm: только Linux/WSL2/macOS), установка по README https://github.com/voicekit-team/T-one

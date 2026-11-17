@@ -1,0 +1,92 @@
+{
+  "task": "asr",
+  "split": "test",
+  "gold_rows": 100,
+  "gold_approved": 100,
+  "models": {
+    "gigaam-v3-e2e": {
+      "all": {
+        "n": 97,
+        "failed": 0,
+        "wer": 0.06040268456375839,
+        "wer_ci95": [
+          0.04120267260579064,
+          0.08123028547499461
+        ],
+        "cer": 0.03622250970245795,
+        "wer_by_slice": {
+          "condition:clean": 0.047619047619047616,
+          "condition:fast": 0.03896103896103896,
+          "condition:noise_8db": 0.0735930735930736,
+          "condition:quiet": 0.0845771144278607,
+          "origin:human": 0.0845771144278607,
+          "origin:tts": 0.05339105339105339
+        },
+        "critical": {
+          "total": 146,
+          "preserved": 146,
+          "rate": 1.0
+        },
+        "silence": {
+          "n": 3,
+          "false_text": 0,
+          "inserted_words": 0
+        },
+        "punctuation_rate": 1.0,
+        "capitalised_rate": 1.0,
+        "rtf": {
+          "n": 97,
+          "median": 0.06313191543298334,
+          "p95": 0.09052691385196773
+        },
+        "seconds": {
+          "n": 97,
+          "median": 0.2818393499983358,
+          "p95": 0.42333364479927654
+        }
+      }
+    },
+    "whisper-turbo": {
+      "all": {
+        "n": 97,
+        "failed": 0,
+        "wer": 0.03803131991051454,
+        "wer_ci95": [
+          0.024041751491124686,
+          0.05326154737257221
+        ],
+        "cer": 0.02328589909443726,
+        "wer_by_slice": {
+          "condition:clean": 0.021645021645021644,
+          "condition:fast": 0.04329004329004329,
+          "condition:noise_8db": 0.04329004329004329,
+          "condition:quiet": 0.04477611940298507,
+          "origin:human": 0.04477611940298507,
+          "origin:tts": 0.03607503607503607
+        },
+        "critical": {
+          "total": 146,
+          "preserved": 144,
+          "rate": 0.9863013698630136
+        },
+        "silence": {
+          "n": 3,
+          "false_text": 3,
+          "inserted_words": 16
+        },
+        "punctuation_rate": 1.0,
+        "capitalised_rate": 0.8969072164948454,
+        "rtf": {
+          "n": 97,
+          "median": 0.0839904680257193,
+          "p95": 0.11340202436649288
+        },
+        "seconds": {
+          "n": 97,
+          "median": 0.3609323009986838,
+          "p95": 0.5137425029999574
+        }
+      }
+    }
+  }
+}

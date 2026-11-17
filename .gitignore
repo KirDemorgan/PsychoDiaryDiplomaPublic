@@ -1,0 +1,74 @@
+# Локальные настройки и секреты
+.env
+.env.*
+!.env.example
+!.env.*.example
+.DS_Store
+.idea/
+*.iml
+
+# Node / Expo
+node_modules/
+.expo/
+dist/
+web-build/
+coverage/
+*.tsbuildinfo
+
+# Java
+target/
+build/
+.gradle/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Локальные данные и веса моделей
+research/datasets/private/
+research/datasets/local/
+research/models/
+*.safetensors
+*.gguf
+
+# Логи
+*.log
+
+# Выходы переносимого Colab notebook (сохранённый notebook хранится отдельно)
+/diary_ai_study/
+/diary_ai_study_results.zip
+/research/notebooks/diary_ai_study/
+/research/notebooks/diary_ai_study_results.zip
+
+# Выходы отдельного голосового Colab notebook
+/diary_voice_study/
+/diary_voice_study_results.zip
+/research/notebooks/diary_voice_study/
+/research/notebooks/diary_voice_study_results.zip
+
+# Локальный WSL runtime и пакеты поставки
+/research/dist/
+/research/local/cache/
+/research/local/data/
+/research/local/envs/
+/research/local/tmp/
+/research/local/input/
+/research/local/output/
+/research/local/checkpoints/
+/research/local/.study.lock
+
+# Исследование: аудио и временные файлы студии
+research/data/audio/
+research/.venv/
+
+# plugins
+/amplicode.xml
+
+# Сборка IntelliJ IDEA
+out/

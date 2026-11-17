@@ -1,0 +1,44 @@
+@startuml Voice_task_state
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam state {
+  BackgroundColor #F3F6FA
+  BorderColor #43546A
+}
+title Жизненный цикл задачи ASR — миграция 008
+state "QUEUED\nВременный WAV" as queued
+state "RUNNING\nLease, WAV, attempt++" as running
+state "SUCCEEDED\nТекст 24 часа, WAV удалён" as succeeded
+state "FAILED\nWAV и текст удалены" as failed
+state "CANCELLED\nWAV и текст удалены" as cancelled
+state "EXPIRED\nТолько метаданные" as expired
+[*] --> queued : Согласие + валидный WAV\nновый ключ / одна активная задача
+queued --> running : Owner lock / claim\nattempt < 2, TTL и согласие актуальны
+running -left-> running : Lease истёк\nновый токен, attempt < 2
+running --> queued : Первая переходная ошибка\nlease очищается
+running --> succeeded : Допустимый текст\nактуальные статус, токен, lease, TTL и согласие
+running --> failed : Второй сбой / нет речи\nмодель отсутствует или изменилась
+queued --> failed : Две попытки исчерпаны\nпри восстановлении worker
+queued --> cancelled : Отмена / отзыв согласия
+running --> cancelled : Отмена / отзыв согласия
+succeeded --> cancelled : Отзыв голосового согласия\nили выключение общего AI
+queued --> expired : 15 минут / очистка либо claim
+running --> expired : 15 минут / очистка либо публикация
+succeeded --> expired : 24 часа / очистка
+failed --> expired : expiresAt / очистка
+cancelled --> expired : expiresAt / очистка
+expired --> [*] : Через семь дней после expiresAt\nудаление метаданных
+note bottom of running
+  Модель вызывается вне транзакции.
+  Поздний ответ старого lease не меняет состояние.
+  Сбой публикации оставляет lease для восстановления.
+end note
+note bottom of expired
+  GET сразу возвращает 410 после TTL.
+  Очистка каждые 60 секунд, партия до 100.
+  Квитанция upload очищается до tombstone.
+end note
+note "DELETE собственной задачи или удаление аккаунта\nудаляет любую задачу и запрещает позднюю публикацию.\nУдаление расшифровки очищает ZIP с её текстом.\nWAV и черновик не используются в PDF напрямую." as deletion
+@enduml
